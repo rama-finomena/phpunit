@@ -105,7 +105,7 @@ class PHPUnit_Framework_Constraint_IsEqual extends PHPUnit_Framework_Constraint
      *
      * @throws PHPUnit_Framework_ExpectationFailedException
      */
-    public function evaluate($other, $description = '', $returnResult = false)
+    protected function matches($other)
     {
         // If $this->value and $other are identical, they are also equal.
         // This is the most common path and will allow us to skip
@@ -129,18 +129,11 @@ class PHPUnit_Framework_Constraint_IsEqual extends PHPUnit_Framework_Constraint
                 $this->canonicalize,
                 $this->ignoreCase
             );
+
+            return true;
         } catch (SebastianBergmann\Comparator\ComparisonFailure $f) {
-            if ($returnResult) {
-                return false;
-            }
-
-            throw new PHPUnit_Framework_ExpectationFailedException(
-                trim($description . "\n" . $f->getMessage()),
-                $f
-            );
+            return false;
         }
-
-        return true;
     }
 
     /**
